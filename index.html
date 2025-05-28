@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KG모빌리언스 온보딩 가이드</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #1a1a1a;
+    }
+    h1 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+    section {
+      margin-bottom: 2rem;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    code {
+      background: #eef;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>KG모빌리언스 REST API 온보딩 가이드</h1>
+
+  <section>
+    <h2>1. 사전 준비 사항</h2>
+    <ul>
+      <li><strong>필수 발급 정보:</strong> sid (가맹점코드), skey (선택)</li>
+      <li><strong>결제수단:</strong> 신용카드, 휴대폰, 계좌이체</li>
+      <li><strong>연동 방식:</strong> 일반결제 or 하이브리드결제</li>
+      <li><strong>지원 환경:</strong> Web / In-App 웹뷰</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>2. 개발 환경 요구 사항</h2>
+    <ul>
+      <li>IP 허용 필요 (전용선 미사용 시 ACL 등록 불필요)</li>
+      <li><strong>API 설정:</strong>
+        <ul>
+          <li>Content-Type: <code>application/json</code></li>
+          <li>Protocol: <code>HTTPS (443)</code></li>
+          <li>Method: <code>POST</code></li>
+          <li>Charset: <code>EUC-KR</code> (응답)</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3. 연동 방식</h2>
+    <h3>일반 결제 방식</h3>
+    <ul>
+      <li>인증 + 승인 자동처리</li>
+      <li><code>hybrid_pay: "N"</code> 또는 미입력</li>
+    </ul>
+    <h3>하이브리드 결제 방식</h3>
+    <ul>
+      <li>인증만 결제창에서 수행, 승인 API 별도 호출</li>
+      <li><code>hybrid_pay: "Y"</code></li>
+      <li>승인 API 예시:
+        <pre><code>{
+  "sid": "000730010001",
+  "tid": "20240601123456789000",
+  "cash_code": "CN",
+  "pay_token": "1904258548577654668",
+  "amount": "1000"
+}</code></pre>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>4. 테스트 및 검증</h2>
+    <ul>
+      <li>테스트 도메인: <code>https://test.mobilians.co.kr</code></li>
+      <li>ok_url: 프론트 화면용</li>
+      <li>noti_url: 서버용 (반드시 <code>SUCCESS</code> 반환)</li>
+      <li>주요 테스트:
+        <ul>
+          <li>결제 전체 플로우 확인</li>
+          <li>응답값 검증 (code, hmac 등)</li>
+          <li>결제 실패 시나리오 검토</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. 결제 취소 및 환불</h2>
+    <ul>
+      <li>API: <code>POST /MUP/api/cancel</code></li>
+      <li>부분취소: <code>part_cancel: Y</code></li>
+      <li>휴대폰 결제 시 부분취소 금액 설정 유의</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>6. 운영환경 전환 및 관리자사이트</h2>
+    <ul>
+      <li>URL: <code>https://cp.mcash.co.kr/mcht/</code></li>
+      <li>메뉴: 거래관리 &gt; 결제수단 조회</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>7. 문의 및 기술지원</h2>
+    <ul>
+      <li>공통정보: SID, 거래번호, 오류코드 등 포함</li>
+      <li>개발자 사이트: <a href="https://test.mobilians.co.kr/devsite/main.html" target="_blank">devsite</a></li>
+    </ul>
+  </section>
+</body>
+</html>
