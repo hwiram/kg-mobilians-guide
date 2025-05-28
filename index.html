@@ -1,133 +1,189 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KG모빌리언스 온보딩 가이드</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      line-height: 1.6;
+      font-family: 'Pretendard', sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
       margin: 0;
       padding: 2rem;
-      background: #f9f9f9;
-      color: #333;
     }
-    h1, h2, h3 {
-      color: #1a1a1a;
-    }
-    h1 {
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 0.5rem;
+    .container {
+      max-width: 960px;
+      margin: auto;
     }
     section {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       margin-bottom: 2rem;
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
-    code {
-      background: #eef;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      font-size: 0.95rem;
+    h1, h2, h3 {
+      color: #111827;
+    }
+    h1 {
+      font-size: 2rem;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 0.5rem;
+    }
+    h2 {
+      margin-top: 1.5rem;
+      font-size: 1.25rem;
     }
     ul {
       padding-left: 1.2rem;
     }
+    code, pre {
+      background-color: #f3f4f6;
+      padding: 0.3rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 0.75rem;
+      text-align: left;
+    }
+    th {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    .checklist td:first-child {
+      width: 30%;
+    }
+    a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <h1>KG모빌리언스 REST API 온보딩 가이드</h1>
+  <div class="container">
+    <h1>KG모빌리언스 온보딩 가이드</h1>
 
-  <section>
-    <h2>1. 사전 준비 사항</h2>
-    <ul>
-      <li><strong>필수 발급 정보:</strong> sid (가맹점코드), skey (선택)</li>
-      <li><strong>결제수단:</strong> 신용카드, 휴대폰, 계좌이체</li>
-      <li><strong>연동 방식:</strong> 일반결제 or 하이브리드결제</li>
-      <li><strong>지원 환경:</strong> Web / In-App 웹뷰</li>
-    </ul>
-  </section>
+    <section>
+      <h2>1. 사전 준비 사항</h2>
+      <ul>
+        <li>가맹점 코드 (sid) - 필수</li>
+        <li>암호화 키 (skey) - 선택</li>
+        <li>연동 결제수단: 신용카드, 휴대폰 결제, 계좌이체</li>
+        <li>연동 방식: 일반 결제 / 하이브리드 결제</li>
+        <li>서비스 환경: Web / In-App 웹뷰 지원</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>2. 개발 환경 요구 사항</h2>
-    <ul>
-      <li>IP 허용 필요 (전용선 미사용 시 ACL 등록 불필요)</li>
-      <li><strong>API 설정:</strong>
-        <ul>
-          <li>Content-Type: <code>application/json</code></li>
-          <li>Protocol: <code>HTTPS (443)</code></li>
-          <li>Method: <code>POST</code></li>
-          <li>Charset: <code>EUC-KR</code> (응답)</li>
-        </ul>
-      </li>
-    </ul>
-  </section>
+    <section>
+      <h2>2. 개발 환경 요구 사항</h2>
+      <p>KG모빌리언스 서버와 통신을 위해 IP 허용이 필요합니다. 전용선 미사용 시 ACL 등록은 생략 가능합니다.</p>
+      <table>
+        <thead>
+          <tr><th>서버 구분</th><th>도메인</th><th>IP</th><th>PORT</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>운영 서버</td><td><a href="https://mup.mobilians.co.kr">https://mup.mobilians.co.kr</a></td><td>Web: 175.158.12.133<br>Noti: 175.158.12.1</td><td>443</td></tr>
+          <tr><td>백업 서버</td><td><a href="https://mup.mobilians.co.kr">https://mup.mobilians.co.kr</a></td><td>Web: 116.127.121.151<br>Noti: 116.127.121.132</td><td>443</td></tr>
+          <tr><td>테스트 서버</td><td><a href="https://test.mobilians.co.kr">https://test.mobilians.co.kr</a></td><td>Web: 175.158.12.152<br>Noti: 175.158.12.2</td><td>443</td></tr>
+        </tbody>
+      </table>
 
-  <section>
-    <h2>3. 연동 방식</h2>
-    <h3>일반 결제 방식</h3>
-    <ul>
-      <li>인증 + 승인 자동처리</li>
-      <li><code>hybrid_pay: "N"</code> 또는 미입력</li>
-    </ul>
-    <h3>하이브리드 결제 방식</h3>
-    <ul>
-      <li>인증만 결제창에서 수행, 승인 API 별도 호출</li>
-      <li><code>hybrid_pay: "Y"</code></li>
-      <li>승인 API 예시:
-        <pre><code>{
+      <h3>📦 API 기본 설정</h3>
+      <ul>
+        <li>Content-Type: <code>application/json</code></li>
+        <li>Protocol: <code>HTTPS (443)</code></li>
+        <li>Method: <code>POST</code></li>
+        <li>Charset: <code>EUC-KR</code> (ok_url 응답 포함)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. 연동 방식</h2>
+      <h3>일반 vs 하이브리드 결제</h3>
+      <table>
+        <thead><tr><th>시나리오</th><th>추천 연동 방식</th></tr></thead>
+        <tbody>
+          <tr><td>단순 상품 구매, 단건 결제</td><td>일반 결제</td></tr>
+          <tr><td>복합 결제(장바구니 등), 정기 결제</td><td>하이브리드 결제</td></tr>
+          <tr><td>예약 상품, 승인 시점 분리 필요</td><td>하이브리드 결제</td></tr>
+          <tr><td>개발 시간 최소화, 간단한 연동 필요</td><td>일반 결제</td></tr>
+        </tbody>
+      </table>
+
+      <p>자세한 구현 방식은 API 문서 참고. 승인 API 예시는 다음과 같습니다.</p>
+      <pre>{
   "sid": "000730010001",
   "tid": "20240601123456789000",
   "cash_code": "CN",
   "pay_token": "1904258548577654668",
   "amount": "1000"
-}</code></pre>
-      </li>
-    </ul>
-  </section>
+}</pre>
+    </section>
 
-  <section>
-    <h2>4. 테스트 및 검증</h2>
-    <ul>
-      <li>테스트 도메인: <code>https://test.mobilians.co.kr</code></li>
-      <li>ok_url: 프론트 화면용</li>
-      <li>noti_url: 서버용 (반드시 <code>SUCCESS</code> 반환)</li>
-      <li>주요 테스트:
-        <ul>
-          <li>결제 전체 플로우 확인</li>
-          <li>응답값 검증 (code, hmac 등)</li>
-          <li>결제 실패 시나리오 검토</li>
-        </ul>
-      </li>
-    </ul>
-  </section>
+    <section>
+      <h2>4. 테스트 및 검증</h2>
+      <ul>
+        <li>결제 흐름: 거래 등록 → 결제창 호출 → 결제 진행 및 승인</li>
+        <li>ok_url (프론트 처리용) / noti_url (서버 응답 필수)</li>
+        <li>테스트 도메인: <code>https://test.mobilians.co.kr</code></li>
+        <li>테스트 수단: 휴대폰결제, 가상계좌 (신용카드는 운영환경에서)</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>5. 결제 취소 및 환불</h2>
-    <ul>
-      <li>API: <code>POST /MUP/api/cancel</code></li>
-      <li>부분취소: <code>part_cancel: Y</code></li>
-      <li>휴대폰 결제 시 부분취소 금액 설정 유의</li>
-    </ul>
-  </section>
+    <section>
+      <h2>5. 운영환경 전환 체크리스트</h2>
+      <table class="checklist">
+        <thead>
+          <tr><th>항목</th><th>설명</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>운영용 sid, skey 적용</td><td>테스트 sid는 운영 sid로 교체</td></tr>
+          <tr><td>pay_url 호출 도메인 변경</td><td>운영 서버: https://mup.mobilians.co.kr</td></tr>
+          <tr><td>IP 방화벽 설정 완료</td><td>운영 Noti/Web 서버 IP 허용</td></tr>
+          <tr><td>실거래 승인 테스트 완료</td><td>실제 카드 결제 후 결과 검증</td></tr>
+          <tr><td>noti_url 동작 확인</td><td>SUCCESS 응답 확인, 중복 요청 방지 로직 포함</td></tr>
+          <tr><td>모빌페이 사이트 거래내역 조회</td><td>정상 결제 시 거래내역 확인 가능</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-  <section>
-    <h2>6. 운영환경 전환 및 관리자사이트</h2>
-    <ul>
-      <li>URL: <code>https://cp.mcash.co.kr/mcht/</code></li>
-      <li>메뉴: 거래관리 &gt; 결제수단 조회</li>
-    </ul>
-  </section>
+    <section>
+      <h2>6. 문의 및 기술지원</h2>
+      <table>
+        <thead>
+          <tr><th>구분</th><th>전화번호</th><th>이메일</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>기술지원/연동 문의</td><td>02-2192-2059</td><td>svcop@kggroup.co.kr</td></tr>
+          <tr><td>계약/정산/신규 문의</td><td>02-2018-2050</td><td>salesop@kggroup.co.kr</td></tr>
+          <tr><td>고객 센터</td><td>1800-0678</td><td>help@kggroup.co.kr</td></tr>
+        </tbody>
+      </table>
 
-  <section>
-    <h2>7. 문의 및 기술지원</h2>
-    <ul>
-      <li>공통정보: SID, 거래번호, 오류코드 등 포함</li>
-      <li>개발자 사이트: <a href="https://test.mobilians.co.kr/devsite/main.html" target="_blank">devsite</a></li>
-    </ul>
-  </section>
+      <p>기술지원 요청 시 아래 항목을 함께 전달해 주세요:</p>
+      <ul>
+        <li>서비스 ID, 결제수단 종류</li>
+        <li>거래번호, 결제 일시</li>
+        <li>에러 발생 시점 및 메시지</li>
+        <li>요청/응답 전문(JSON)</li>
+      </ul>
+      <p>
+        🌐 개발자 사이트: <a href="https://test.mobilians.co.kr/devsite/main.html">https://test.mobilians.co.kr/devsite/main.html</a><br>
+        🌐 관리자 사이트: <a href="https://cp.mcash.co.kr/mcht/">https://cp.mcash.co.kr/mcht/</a>
+      </p>
+    </section>
+  </div>
 </body>
 </html>
