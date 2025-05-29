@@ -7,21 +7,13 @@
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #f9fafb;
-      --fg: #1f2937;
-      --section-bg: #ffffff;
-      --table-header: #fef3c7;
-      --table-header-text: #92400e;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1f2937;
-        --fg: #f9fafb;
-        --section-bg: #111827;
-        --table-header: #374151;
-        --table-header-text: #facc15;
-      }
+  --bg: #f9fafb;
+  --fg: #1f2937;
+  --section-bg: #ffffff;
+  --table-header: #fef3c7;
+  --table-header-text: #92400e;
+}
+    
     }
     body {
       font-family: 'Pretendard', sans-serif;
@@ -62,10 +54,13 @@
       color: #10b981;
     }
     code, pre {
-      background-color: #d0dbde;
+      background-color: var(--code-bg, #2d3748);
+      color: #ffffff;
       padding: 0.3rem 0.5rem;
       border-radius: 6px;
       font-size: 0.9rem;
+      overflow-x: auto;
+      display: block;
     }
     table {
       width: 100%;
@@ -96,11 +91,17 @@
       text-decoration: underline;
     }
   </style>
+  <script>
+    const allowedDomain = "@kggroup.co.kr";
+    const email = prompt("접근 이메일을 입력하세요:");
+    if (!email || !email.trim().toLowerCase().endsWith(allowedDomain)) {
+      document.body.innerHTML = "<h1 style='text-align:center; padding:2rem;'>❌ 접근이 허용되지 않았습니다.</h1>";
+    }
+  </script>
 </head>
 <body>
   <div class="container">
     <h1><span style="color: purple; font-weight: bold;">KG모빌리언스</span> 온보딩 가이드</h1>
-
     <details open>
       <summary>1. 사전 준비 사항</summary>
       <ul>
