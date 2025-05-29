@@ -7,31 +7,31 @@
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
   <style>
     :root {
-  --bg: #f9fafb;
-  --fg: #1f2937;
-  --section-bg: #ffffff;
-  --table-header: #fef3c7;
-  --table-header-text: #92400e;
-}
-    
+      --bg: #f9fafb;
+      --fg: #1f2937;
+      --section-bg: #ffffff;
+      --table-header: #fef3c7;
+      --table-header-text: #92400e;
     }
+
     body {
       font-family: 'Pretendard', sans-serif;
       background-color: var(--bg);
       color: var(--fg);
       margin: 0;
-      padding: 2rem;
+      padding: 1rem;
     }
     .container {
       max-width: 960px;
       margin: auto;
+      padding: 1rem;
     }
     details {
       background: var(--section-bg);
-      padding: 1.5rem;
+      padding: 1rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     summary {
       font-size: 1.25rem;
@@ -40,10 +40,11 @@
       outline: none;
     }
     h1 {
-      font-size: 2rem;
+      font-size: 1.75rem;
       border-bottom: 2px solid #e5e7eb;
       padding-bottom: 0.5rem;
       margin-bottom: 1rem;
+      text-align: center;
     }
     ul {
       padding-left: 1.2rem;
@@ -66,6 +67,8 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 1rem;
+      overflow-x: auto;
+      display: block;
     }
     th, td {
       border: 1px solid #e5e7eb;
@@ -90,6 +93,39 @@
     a:hover {
       text-decoration: underline;
     }
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      summary {
+        font-size: 1.1rem;
+      }
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+      th {
+        background-color: var(--table-header);
+        color: var(--table-header-text);
+        text-align: left;
+      }
+      td {
+        border: none;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 0.5rem;
+      }
+      tr {
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #e5e7eb;
+      }
+      td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #6b7280;
+      }
+    }
   </style>
   <script>
     const allowedDomain = "@kggroup.co.kr";
@@ -102,6 +138,7 @@
 <body>
   <div class="container">
     <h1><span style="color: purple; font-weight: bold;">KG모빌리언스</span> 온보딩 가이드</h1>
+
     <details open>
       <summary>1. 사전 준비 사항</summary>
       <ul>
