@@ -127,10 +127,10 @@
       </table>
       <h3>📦 API 기본 설정</h3>
       <ul>
-        <li>Content-Type: <code>application/json</code></li>
-        <li>Protocol: <code>HTTPS (443)</code></li>
-        <li>Method: <code>POST</code></li>
-        <li>Charset: <code>EUC-KR</code> (ok_url 응답 포함)</li>
+        <li>Content-Type: application/json</li>
+        <li>Protocol: HTTPS (443)</li>
+        <li>Method: POST</li>
+        <li>Charset: EUC-KR (ok_url 응답 포함)</li>
       </ul>
     </details>
 
@@ -141,17 +141,17 @@
   <p><strong>특징:</strong></p>
   <ul>
     <li>인증과 승인 절차가 결제창 내에서 자동으로 처리됨</li>
-    <li>결제 완료 시 KG모빌리언스에서 <code>ok_url</code> 및 <code>noti_url</code>로 결과 전송</li>
+    <li>결제 완료 시 KG모빌리언스에서 ok_url 및 noti_url로 결과 전송</li>
     <li>구현이 간단하여 단건 결제나 단순 상품 판매에 적합</li>
   </ul>
-  <p><strong>✅ 사용 조건:</strong> <code>hybrid_pay: "N"</code> 또는 미입력</p>
+  <p><strong>✅ 사용 조건:</strong> hybrid_pay: "N" 또는 미입력</p>
   <p><strong>✅ 프로세스 요약:</strong></p>
   <ol>
     <li>거래 등록 (registration API)</li>
     <li>pay_url로 결제창 호출</li>
     <li>사용자 결제 진행</li>
-    <li>결제 완료 시 자동 승인 처리 → <code>ok_url</code>, <code>noti_url</code>로 결과 전달</li>
-    <li>CP는 <code>SUCCESS</code> 응답 시 서비스 제공</li>
+    <li>결제 완료 시 자동 승인 처리 → ok_url, noti_url로 결과 전달</li>
+    <li>CP는 SUCCESS 응답 시 서비스 제공</li>
   </ol>
   <p><strong>🟡 유의사항:</strong> noti_url 로직 방어로 실패/중복 결제 방지 권장</p>
 </section>
@@ -164,13 +164,13 @@
     <li>승인은 CP 서버에서 API로 직접 요청</li>
     <li>복합결제, 예약결제, 승인 시점 지연 등 유연한 시나리오에 유리</li>
   </ul>
-  <p><strong>✅ 사용 조건:</strong> <code>hybrid_pay: "Y"</code> 설정 및 인증 후 <code>/api/approval</code> API 호출 필요</p>
+  <p><strong>✅ 사용 조건:</strong> hybrid_pay: "Y" 설정 및 인증 후 /api/approval API 호출 필요</p>
   <p><strong>✅ 프로세스 요약:</strong></p>
   <ol>
-    <li>거래 등록 (<code>hybrid_pay=Y</code>)</li>
+    <li>거래 등록 (hybrid_pay=Y)</li>
     <li>pay_url로 결제창 호출</li>
     <li>사용자 결제 (인증만 수행)</li>
-    <li>인증 완료 후 <code>ok_url</code>, <code>noti_url</code> 수신</li>
+    <li>인증 완료 후 ok_url, noti_url 수신</li>
     <li>CP가 pay_token으로 승인 API 호출</li>
     <li>승인 결과 확인 후 서비스 제공</li>
   </ol>
@@ -228,45 +228,45 @@
   <h3>1. 🔐 결제 흐름 개요</h3>
   <ol>
     <li><strong>거래 등록</strong><br>
-    API: <code>POST /MUP/api/registration</code><br>
+    API: POST /MUP/api/registration<br>
     파라미터: sid, cash_code(CN: 카드, MC: 휴대폰), amount, trade_id, ok_url, noti_url</li>
     <li><strong>결제창 호출</strong><br>
     응답받은 pay_url을 팝업 또는 iframe 으로 호출<br>
-    예시: <code>window.open("https://mup.mobilians.co.kr/MUP/api/payment.mcash?tid=xxxx");</code></li>
+    예시: window.open("https://mup.mobilians.co.kr/MUP/api/payment.mcash?tid=xxxx");</li>
     <li><strong>결제 진행 및 승인</strong><br>
-    결제 후 KG모빌리언스는 <code>ok_url</code>, <code>noti_url</code>로 결과 전송<br>
+    결제 후 KG모빌리언스는 ok_url, noti_url로 결과 전송<br>
     ok_url: 프론트 처리용<br>
-    noti_url: 서버 간 통신용 → 반드시 <code>SUCCESS</code> 출력 필요</li>
+    noti_url: 서버 간 통신용 → 반드시 SUCCESS 출력 필요</li>
   </ol>
 
   <h3>2. 🔧 테스트 환경 구성</h3>
   <ul>
-    <li>테스트 서버: <code>https://test.mobilians.co.kr</code></li>
+    <li>테스트 서버: https://test.mobilians.co.kr</li>
     <li>지원 수단: 휴대폰결제, 가상계좌<br>※ 신용카드는 운영환경에서 실 거래로만 테스트 가능</li>
   </ul>
 
   <h3>3. 🧪 주요 테스트 항목</h3>
   <ol>
     <li>전체 결제 흐름 검증: 거래등록 → 결제창 호출 → 결제 진행</li>
-    <li>noti_url 응답 검증: <code>code == '0000'</code>, <code>hmac</code> 무결성 확인</li>
+    <li>noti_url 응답 검증: code == '0000', hmac 무결성 확인</li>
     <li>요청 데이터 확인: 금액, 상품명, 사용자정보 등 실제값 전달 여부</li>
     <li>예외 처리 시나리오: 실패 응답, 사용자 취소 케이스 등 포함</li>
   </ol>
 
   <h3>4. 📩 결제 결과 처리 (noti_url)</h3>
-  <p><strong>필수 응답:</strong> <code>SUCCESS</code> 또는 <code>FAIL</code> (텍스트 출력)</p>
+  <p><strong>필수 응답:</strong> SUCCESS 또는 FAIL (텍스트 출력)</p>
   <p><strong>✅ SUCCESS 출력 조건:</strong></p>
   <ul>
-    <li>응답 <code>code == '0000'</code></li>
+    <li>응답 code == '0000'</li>
     <li>접속 IP는 KG모빌리언스 서버</li>
-    <li><code>hmac</code>, <code>amount</code> 등 항목 일치</li>
+    <li>hmac, amount 등 항목 일치</li>
     <li><strong>※ 누락 시 20회까지 재전송 → 중복 서비스 주의!</strong></li>
   </ul>
 
   <h3>5. 🔁 결제 취소 및 환불</h3>
   <ul>
-    <li>공통 API: <code>POST /MUP/api/cancel</code></li>
-    <li>필드: <code>cash_code</code>, <code>part_cancel: Y/N</code></li>
+    <li>공통 API: POST /MUP/api/cancel</li>
+    <li>필드: cash_code, part_cancel: Y/N</li>
     <li><strong>⚠️ 휴대폰결제</strong>는 부분취소 금액 셋팅 방식 필수 확인</li>
   </ul>
 </section>
